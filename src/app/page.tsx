@@ -14,9 +14,10 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const posts = getAllPosts()
   const [featured, ...rest] = posts
+  const timelinePosts = posts.filter((post) => post.frontmatter.showInTimeline)
 
-  const continents = getUniqueContinents(posts)
-  const countries = getUniqueCountries(posts)
+  const continents = getUniqueContinents(timelinePosts)
+  const countries = getUniqueCountries(timelinePosts)
 
   return (
     <>

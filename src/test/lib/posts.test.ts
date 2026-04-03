@@ -122,6 +122,14 @@ describe('FrontmatterSchema', () => {
     }
   })
 
+  it('defaults showInTimeline to true when omitted', () => {
+    const result = FrontmatterSchema.safeParse(valid)
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.showInTimeline).toBe(true)
+    }
+  })
+
   it('defaults gallery and tips to empty arrays when omitted', () => {
     const result = FrontmatterSchema.safeParse(valid)
     expect(result.success).toBe(true)

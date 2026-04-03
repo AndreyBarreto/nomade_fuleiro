@@ -19,14 +19,14 @@ function formatMonthYear(date: Date): string {
 
 export default function SobrePage() {
   const posts = getAllPosts()
-
-  const countries = getUniqueCountries(posts)
-  const continents = getUniqueContinents(posts)
+  const timelinePosts = posts.filter((post) => post.frontmatter.showInTimeline)
 
   // Timeline: oldest first
-  const timeline = [...posts].sort(
+  const timeline = [...timelinePosts].sort(
     (a, b) => a.frontmatter.date.getTime() - b.frontmatter.date.getTime()
   )
+  const countries = getUniqueCountries(timelinePosts)
+  const continents = getUniqueContinents(timelinePosts)
 
   return (
     <>

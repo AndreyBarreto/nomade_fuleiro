@@ -25,6 +25,7 @@ export function makePost(overrides: Partial<Post> = {}): Post {
       tips: [],
       practicalInfo: undefined,
       draft: false,
+      showInTimeline: true,
     },
   }
 
@@ -61,6 +62,7 @@ export const DRAFT_POST = makePost({
     tips: [],
     practicalInfo: undefined,
     draft: true,
+    showInTimeline: true,
   },
 })
 

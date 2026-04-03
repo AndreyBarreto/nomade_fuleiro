@@ -41,6 +41,7 @@ export const FrontmatterSchema = z.object({
   tips: z.array(z.string()).optional().default([]),
   practicalInfo: PracticalInfoSchema.optional(),
   draft: z.boolean().default(false),
+  showInTimeline: z.boolean().default(true),
 })
 
 export type Frontmatter = z.infer<typeof FrontmatterSchema>
