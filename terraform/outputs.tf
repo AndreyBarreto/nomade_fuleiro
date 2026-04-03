@@ -31,5 +31,5 @@ output "ci_deploy_access_key_id" {
 output "ci_deploy_secret_access_key" {
   description = "AWS_SECRET_ACCESS_KEY for GitHub Actions — add as a repository secret"
   value       = aws_iam_access_key.ci_deploy.secret
-  # sensitive   = true
+  sensitive   = true
 }

@@ -29,3 +29,18 @@ vi.mock('next/link', async () => {
     }) => createElement('a', { href, ...props }, children as never),
   }
 })
+
+vi.mock('next/image', async () => {
+  const { createElement } = await import('react')
+  return {
+    default: ({
+      src,
+      alt,
+      ...props
+    }: {
+      src: string
+      alt: string
+      [key: string]: unknown
+    }) => createElement('img', { src, alt, ...props }),
+  }
+})

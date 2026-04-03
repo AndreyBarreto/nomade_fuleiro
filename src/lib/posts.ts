@@ -65,7 +65,7 @@ export function getPostSlugs(): string[] {
 
 export function getPostBySlug(slug: string): Post | null {
   if (!/^[a-z0-9-]+$/i.test(slug)) {
-    return null;
+    return null
   }
   const filePath = path.join(POSTS_DIR, slug, 'index.mdx')
   if (!fs.existsSync(filePath)) return null
@@ -76,15 +76,11 @@ export function getPostBySlug(slug: string): Post | null {
   return { slug, frontmatter, content }
 }
 
-let cachedPosts: Post[] | null = null
-
 export function getAllPosts(): Post[] {
-  if (cachedPosts) return cachedPosts
-  cachedPosts = getPostSlugs()
+  return getPostSlugs()
     .map((slug) => getPostBySlug(slug))
     .filter((post): post is Post => post !== null && !post.frontmatter.draft)
     .sort((a, b) => b.frontmatter.date.getTime() - a.frontmatter.date.getTime())
-  return cachedPosts
 }
 
 export function getPostsByContinent(continent: string): Post[] {

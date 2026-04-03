@@ -11,7 +11,6 @@ vi.mock('fs', () => ({
 import fs from 'fs'
 import {
   FrontmatterSchema,
-  formatDate,
   getAllPosts,
   getPostBySlug,
   getPostSlugs,
@@ -20,6 +19,7 @@ import {
   getPostsByCountry,
   getSeriesNavigation,
 } from '@/lib/posts'
+import { formatDate } from '@/lib/utils'
 
 const mockFs = vi.mocked(fs)
 
@@ -77,6 +77,12 @@ beforeEach(() => {
   mockFs.readdirSync.mockReturnValue(['post-a'] as unknown as ReturnType<typeof fs.readdirSync>)
   mockFs.readFileSync.mockReturnValue(VALID_MDX)
 })
+
+function getSeriesNavigationBySlug(slug: string) {
+  const currentPost = getPostBySlug(slug)
+  if (!currentPost) return null
+  return getSeriesNavigation(currentPost, getAllPosts())
+}
 
 // ── FrontmatterSchema ────────────────────────────────────────────────────────
 
@@ -402,14 +408,14 @@ describe('getSeriesNavigation', () => {
   it('returns null when post has no tags', () => {
     mockFs.readdirSync.mockReturnValue(['no-tags'] as unknown as ReturnType<typeof fs.readdirSync>)
     mockFs.readFileSync.mockReturnValue(NO_TAGS_MDX)
-    const result = getSeriesNavigation('no-tags')
+    const result = getSeriesNavigationBySlug('no-tags')
     expect(result).toBeNull()
   })
 
   it('returns null when no tag is shared by multiple posts', () => {
     mockFs.readdirSync.mockReturnValue(['solo-post'] as unknown as ReturnType<typeof fs.readdirSync>)
     mockFs.readFileSync.mockReturnValue(UNIQUE_TAG_MDX)
-    const result = getSeriesNavigation('solo-post')
+    const result = getSeriesNavigationBySlug('solo-post')
     expect(result).toBeNull()
   })
 
@@ -417,7 +423,7 @@ describe('getSeriesNavigation', () => {
     mockFs.readFileSync.mockImplementation(() => {
       throw new Error('ENOENT: no such file or directory')
     })
-    expect(() => getSeriesNavigation('non-existent')).toThrow()
+    expect(() => getSeriesNavigationBySlug('non-existent')).toThrow()
   })
 
   it('detects the most-shared tag as the series tag', () => {
@@ -437,7 +443,7 @@ describe('getSeriesNavigation', () => {
       return SERIES_C_MDX
     })
     // current post is post-a which has both tags; europa appears in 3 posts, diario-2026 in 2
-    const result = getSeriesNavigation('post-a')
+    const result = getSeriesNavigationBySlug('post-a')
     expect(result).not.toBeNull()
     expect(result!.seriesTag).toBe('europa')
   })
@@ -452,7 +458,7 @@ describe('getSeriesNavigation', () => {
       if (p.includes('post-b')) return SERIES_B_MDX
       return SERIES_C_MDX
     })
-    const result = getSeriesNavigation('post-b')
+    const result = getSeriesNavigationBySlug('post-b')
     expect(result).not.toBeNull()
     expect(result!.prev).not.toBeNull()
     expect(result!.prev!.slug).toBe('post-a')
@@ -470,7 +476,7 @@ describe('getSeriesNavigation', () => {
       if (p.includes('post-b')) return SERIES_B_MDX
       return SERIES_C_MDX
     })
-    const result = getSeriesNavigation('post-a')
+    const result = getSeriesNavigationBySlug('post-a')
     expect(result).not.toBeNull()
     expect(result!.prev).toBeNull()
     expect(result!.next).not.toBeNull()
@@ -486,7 +492,7 @@ describe('getSeriesNavigation', () => {
       if (p.includes('post-b')) return SERIES_B_MDX
       return SERIES_C_MDX
     })
-    const result = getSeriesNavigation('post-c')
+    const result = getSeriesNavigationBySlug('post-c')
     expect(result).not.toBeNull()
     expect(result!.next).toBeNull()
     expect(result!.prev).not.toBeNull()
@@ -502,7 +508,7 @@ describe('getSeriesNavigation', () => {
       if (p.includes('post-b')) return SERIES_B_MDX
       return SERIES_C_MDX
     })
-    const result = getSeriesNavigation('post-b')
+    const result = getSeriesNavigationBySlug('post-b')
     expect(result).not.toBeNull()
     expect(result!.seriesLength).toBe(3)
     expect(result!.currentIndex).toBe(1)
@@ -524,7 +530,7 @@ describe('getSeriesNavigation', () => {
       if (p.includes('post-b')) return DRAFT_SERIES_MDX
       return SERIES_C_MDX
     })
-    const result = getSeriesNavigation('post-a')
+    const result = getSeriesNavigationBySlug('post-a')
     expect(result).not.toBeNull()
     expect(result!.seriesLength).toBe(2)
     expect(result!.next!.slug).toBe('post-c')

@@ -33,9 +33,9 @@ describe('PostCard', () => {
     expect(screen.getByText(/3 dias/)).toBeInTheDocument()
   })
 
-  it('renders the budget label ($$$ → Expensive)', () => {
+  it('renders the budget label ($$$ → Moderado)', () => {
     render(<PostCard post={post} />)
-    expect(screen.getByText('Caro')).toBeInTheDocument()
+    expect(screen.getByText('Moderado')).toBeInTheDocument()
   })
 
   it('renders the description', () => {
