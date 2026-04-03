@@ -1,0 +1,5 @@
+project_name      = "nomade-fuleiro"
+environment       = "shared"
+aws_region        = "us-east-1"
+state_bucket_name = "nomade-fuleiro-terraform-state"
+lock_table_name   = "nomade-fuleiro-terraform-lock"

@@ -1,0 +1,31 @@
+import { defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react(), tsconfigPaths()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    exclude: ['node_modules', 'e2e/**'],
+    server: {
+      deps: {
+        inline: ['gray-matter'],
+      },
+    },
+    coverage: {
+      provider: 'v8',
+      include: ['src/lib/**', 'src/components/**'],
+      exclude: ['src/test/**'],
+      reporter: ['text', 'html'],
+    },
+  },
+})

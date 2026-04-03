@@ -1,0 +1,12 @@
+project_name = "nomade-fuleiro"
+environment  = "prod"
+aws_region   = "us-east-1"
+
+# Custom domain (optional)
+# domain_name     = "nomadefuleiro.com.br"
+# certificate_arn = "arn:aws:acm:us-east-1:123456789:certificate/xxx"
+
+# PriceClass_100 = US + Europe (cheapest)
+# PriceClass_200 = + South America
+# PriceClass_All = worldwide
+price_class = "PriceClass_100"

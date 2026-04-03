@@ -1,0 +1,5 @@
+bucket         = "nomade-fuleiro-terraform-state"
+key            = "nomade-fuleiro/prod/terraform.tfstate"
+region         = "us-east-1"
+dynamodb_table = "nomade-fuleiro-terraform-lock"
+encrypt        = true
